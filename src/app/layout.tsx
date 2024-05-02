@@ -19,6 +19,7 @@ export default function RootLayout({
     <QueryProvider>
       <html lang='ko'>
         <body className={FontClassNames}>
+          {/* 하위 컴포넌트로 세션 넘겨주는 provider */}
           <NextAuthProvider>
             <Container>{children}</Container>
           </NextAuthProvider>

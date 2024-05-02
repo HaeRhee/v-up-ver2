@@ -13,9 +13,15 @@ import { OPEN_ANOTHER_SHADOW } from './login/loginCss'
 
 const Header = () => {
   const { data: user, status } = useSession()
-  const path = usePathname()
-  const check = status === 'authenticated' && !['/login', 'join'].includes(path)
 
+  //현재 위치의 path확인
+  const path = usePathname()
+
+  //로그인 여부에 따른 플레이어와 메인의 여백 체크
+  const check =
+    status === 'authenticated' && !['/login', '/join'].includes(path)
+
+  //path의 위치가 마이페이지 일 경우
   if (path === '/mypage') {
     return (
       <header
@@ -62,6 +68,7 @@ const Header = () => {
       </header>
     )
   } else if (
+    //path가 mypage가 아닌 다른 주소일 경우
     path === '/join' ||
     path === '/login' ||
     path === '/personal-music' ||
@@ -88,6 +95,7 @@ const Header = () => {
       </header>
     )
   } else {
+    // 그 외
     return (
       <header
         className={`flex h-[120px] w-[836px] items-center justify-between border-b-2 border-solid border-primary-black py-4 ${check ? 'pl-[5rem]' : 'pl-[2.5rem]'} pr-[2.5rem]`}

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Swal from 'sweetalert2'
+
 import { useMusicSearchedStore } from '@/shared/store/communityDetailStore'
 import {
   useCoummunityItem,
@@ -12,9 +13,11 @@ import {
 } from '@/query/communityDetail/mutation'
 import useInput from '@/hooks/useInput'
 import goback from '@/../public/images/goback.svg'
+// CSS 스타일 및 관련 상수
 import { ADD_BOARD_STICK, ALLOW_SHADOW } from './communityCss'
 import { DOWN_ACTIVE_BUTTON } from '../login/loginCss'
 import { ACTIVE_BUTTON_SHADOW } from '../login/buttonCss'
+
 import CommunityAddMusic from './CommunityAddMusic'
 import { CommunityNoSsrQuillEditor } from './CommunityNoSsrQuillEditor'
 import { MusicInfoType } from '@/types/musicPlayer/types'
@@ -25,16 +28,21 @@ type CommunityForm = {
 }
 
 const CommunityCreate = () => {
+  // 커뮤니티 등록 페이지, 퀼 에디터 적용
   const router = useRouter()
   const refTitle = useRef<HTMLInputElement>(null)
   const {
-    chooseMusic,
-    setChooseMusic,
-    setIsChooseMusic,
-    setSelectedCardIndex,
+    chooseMusic, // 선택한 음악
+    setChooseMusic, // 선택한 음악 세팅
+    setIsChooseMusic, // 선택한 음악 여부
+    setSelectedCardIndex, // 선택한 음악의 index - css로 클릭한 index bg 활성화위해 설정
   } = useMusicSearchedStore()
   const { addCommunityMutation } = useCoummunityItem()
+
+  // 로그인된 유저 정보
   const { data: userSessionInfo, status } = useSession()
+
+  // 선택된 음악의 정보
   const musicId = chooseMusic?.musicId as string
   const musicTitle = chooseMusic?.musicTitle
   const artist = chooseMusic?.artist
@@ -56,9 +64,11 @@ const CommunityCreate = () => {
 
   const { boardTitle, content } = communityForm
 
+  // 등록 핸들러
   const onSumitHandler = async (e: FormEvent) => {
     e.preventDefault()
 
+    // 입력값의 유효성 검사하는 함수 - validateFormBlank
     const { firstBlank: titleBlank, secondBlank: contentBlack } =
       validateFormBlank(boardTitle, content)
 
@@ -85,6 +95,7 @@ const CommunityCreate = () => {
       return
     }
 
+    // 선택한 음악의 내용이 없을 때
     if (!chooseMusic) {
       await Swal.fire({
         text: '음악 선택은 필수입니다!',
@@ -96,6 +107,7 @@ const CommunityCreate = () => {
       return
     }
 
+    // 유저 정보가 있을 경우 게시글을 등록
     if (userSessionInfo && userSessionInfo.user.uid) {
       const { uid } = userSessionInfo.user
       const newData = {
@@ -116,6 +128,7 @@ const CommunityCreate = () => {
         color: '#ffffff',
       })
       reset()
+      // 등록 후 상태관리(스토리지에 저장되게 한 내용)내용 비우기
       setChooseMusic(null)
       router.push('/community')
     }
@@ -146,6 +159,7 @@ const CommunityCreate = () => {
     return
   }
 
+  // 컴포넌트가 마운트될 때, 제목에 포커스 및 내용 미리 비워줌
   useEffect(() => {
     if (refTitle.current !== null) {
       refTitle.current.focus()
@@ -205,6 +219,7 @@ const CommunityCreate = () => {
             </div>
 
             <article className='h-[200px] text-[16px]'>
+              {/* 에디터 적용 */}
               <CommunityNoSsrQuillEditor
                 theme='snow'
                 content={content}

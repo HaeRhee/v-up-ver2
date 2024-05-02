@@ -35,6 +35,7 @@ const PersonalRecommend: React.FC<PersonalRecommendProps> = ({ userChar }) => {
     insertCurrentMusicMutation,
   } = useMutatePersonal(setCheckedList)
 
+  //사용자가 음악을 선택 or 선택해제
   const onChangeCheckMusicHandler = (checked: boolean, id: string) => {
     if (checked) {
       setCheckedList((prev) => [...prev, id])
@@ -44,6 +45,7 @@ const PersonalRecommend: React.FC<PersonalRecommendProps> = ({ userChar }) => {
     }
   }
 
+  //현재 재생 목록
   const currentList =
     current?.length === 0
       ? []
@@ -61,6 +63,7 @@ const PersonalRecommend: React.FC<PersonalRecommendProps> = ({ userChar }) => {
       return
     }
 
+    //선택한 음악이 현재 재생목록에 있는 곡인지
     const filterMusic = checkedList.filter((musicId) =>
       currentList.includes(musicId),
     )
@@ -77,6 +80,7 @@ const PersonalRecommend: React.FC<PersonalRecommendProps> = ({ userChar }) => {
       return
     }
 
+    //재생목록이 있는지에 따른 처리
     if (!current || current.length === 0) {
       const musicList = [...checkedList] as string[]
       insertCurrentMusicMutation.mutate({ userId: userChar.uid, musicList })
@@ -95,6 +99,7 @@ const PersonalRecommend: React.FC<PersonalRecommendProps> = ({ userChar }) => {
       resultMusic: resultMusic,
     }
 
+    //퍼스널 진단은 받은 적이 있는지에 따른 처리
     if (personalUser?.find((user) => user.userId === userChar.uid)) {
       // alert('진단 결과 업데이트 및 곡 추가가 완료됐습니다.')
       Swal.fire({

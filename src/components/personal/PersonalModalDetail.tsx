@@ -28,9 +28,11 @@ const PersonalModalDetail = ({ isOpen, onClose }: PersonalModal) => {
     }
   }
   const onCloseModalHandler = () => {
+    //오늘은 그만보기를 지정할 만료날자를 설정한다.
+    //만료날자를 설정하기 위해 현재 시간을 저장하고
     let expires = new Date()
-    expires.setHours(expires.getHours() + 24)
-    localStorage.setItem('homeVisited', expires.getTime().toString())
+    expires.setHours(expires.getHours() + 24) //24시간 후의 시간을 로컬 스토리지에 저장한다.
+    localStorage.setItem('homeVisited', expires.getTime().toString()) //추후 이 만료날짜와 현재 일자를 비교해 모달을 띄운다.
     onClose()
   }
   return (

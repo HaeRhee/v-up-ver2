@@ -18,6 +18,7 @@ const GenreMusicList = () => {
     enabled: !!uid,
   })
 
+  //유저의 mbti 기반으로 top3 선호 장르 추출하여 props로 값 전달
   const { data: musicPreferenceData } = useQuery({
     queryFn: () => getMusicPreferenceData(userData?.userChar.mbti as number),
     queryKey: [GET_USER_INFO.USER_MUSIC_PREFERENCE, userData],

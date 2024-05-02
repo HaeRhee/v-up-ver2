@@ -19,6 +19,7 @@ import { ACTIVE_BUTTON_SHADOW } from '../login/buttonCss'
 import AllowUserInfo from './AllowUserInfo'
 import useInput from '@/hooks/useInput'
 import Swal from 'sweetalert2'
+// 비밀번호와 이메일 유효성을 검사하는 정규식
 import { blankPattern, validateDetailPw, validateEmail } from './value'
 
 const Join = () => {
@@ -31,6 +32,7 @@ const Join = () => {
     userNickname: '',
     checkAgree: false,
   }
+  // 회원가입 입력 내용
   const {
     form: join,
     setForm: setJoin,
@@ -40,19 +42,25 @@ const Join = () => {
 
   const { userEmail, userPw, userPwCheck, userNickname, checkAgree } = join
 
+  // 약관 동의, 비밀번호 등 유효성 검사
   const validateCheckAgree = checkAgree
   const validatePassword = !(userPw === userPwCheck)
   const validateEmptyValue = !(userEmail || userPwCheck || userNickname)
 
+  // 체크박스 클릭 핸들러
   const onClickCheckboxHandler = () => {
     setJoin((prevForm) => ({ ...prevForm, checkAgree: !prevForm.checkAgree }))
   }
 
+  // 회원가입 핸들러
   const onJoinHandler = async (e: FormEvent) => {
     e.preventDefault()
+
+    // 이메일과 비밀번호에 공백을 확인
     const { firstBlank: userEmailBlank, secondBlank: userPwBlank } =
       validateFormBlank(userEmail, userPw)
 
+    // 비밀번호에 공백이 있는 경우 유효성
     if (
       blankPattern.test(userPw) == true ||
       blankPattern.test(userPwCheck) == true
@@ -66,7 +74,7 @@ const Join = () => {
       })
       return
     }
-
+    // 빈칸이 있는지 확인 유효성
     if (validateEmptyValue || userEmailBlank === '') {
       await Swal.fire({
         text: '빈칸 없이 작성해 주세요.',
@@ -78,6 +86,7 @@ const Join = () => {
       return
     }
 
+    // 비밀번호의 형식을 유효성 검사
     if (!validateDetailPw.test(userPw)) {
       await Swal.fire({
         text: '비밀번호는 6자 이상, 숫자, 소문자를 모두 포함해야 합니다.',
@@ -90,6 +99,7 @@ const Join = () => {
       return
     }
 
+    // 비밀번호와 비밀번호 확인 값이 일치하는지 확인
     if (validatePassword || userPwBlank === '') {
       await Swal.fire({
         text: '비밀번호를 다시 입력해주세요.',
@@ -101,6 +111,7 @@ const Join = () => {
       return
     }
 
+    // 약관 동의 여부를 확인
     if (validateCheckAgree === false) {
       await Swal.fire({
         text: '약관 동의는 필수입니다',
@@ -112,6 +123,7 @@ const Join = () => {
       return
     }
 
+    // 회원가입 api
     let { data, error } = await signUp({
       email: userEmail,
       password: userPw,
@@ -139,6 +151,7 @@ const Join = () => {
     }
 
     if (data) {
+      // 데이터가 없을 때 에러 핸들링
       if (
         data?.user?.identities?.length === 0 ||
         (error && error.status === 422)
@@ -153,6 +166,7 @@ const Join = () => {
         return
       }
 
+      // 에러 핸들링
       if (error) {
         const errorStatus = error.status
         if (errorStatus === 400) {

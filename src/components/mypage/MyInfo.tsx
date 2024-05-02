@@ -36,6 +36,7 @@ const MyInfo = () => {
   const nicknameRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
+  //항목별 공개 여부에 따른 체크박스 렌더링을 위한 useState
   const [isVisibility, setIsVisibility] = useState({
     mbtiOpen: false,
     personalMusicOpen: false,
@@ -143,6 +144,7 @@ const MyInfo = () => {
     }
   }
 
+  //닉네임 입력하지 않았을 때 노출되는 텍스트
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nickname = e.target.value
     setNickname(nickname)
@@ -151,6 +153,7 @@ const MyInfo = () => {
     }
   }
 
+  //이미지 업로드
   const selectFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0] as File
 

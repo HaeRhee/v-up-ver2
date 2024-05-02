@@ -42,8 +42,12 @@ const UserPlaylist = ({
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const [scrollBoxTopPosition, setScrollBoxTopPosition] = useState(0)
 
-  const PER_PAGE = 5
-  const MAX_PAGES = 4
+  const PER_PAGE = 5 //한 번에 불러올 데이터 수
+  const MAX_PAGES = 4 //유지할 페이지 수
+
+  //**** 무한 스크롤 기본 로직 ****
+  //역방향 : onScroll 이벤트 핸들러를 통해 일정 스크롤 사이즈에 도달할 경우 이전 페이지의 데이터를 불러오는 로직 실행
+  //정방향 : intersection observer 를 통해 타켓이 보일 경우 다음 페이지 데이터를 불러오는 로직 실행
 
   const {
     data: userPlaylistMyData,
@@ -81,6 +85,7 @@ const UserPlaylist = ({
 
   const userPlaylistMyIds = userPlaylistMyData?.userPlaylistMyIds
 
+  //현플리 데이터 조회
   const { data: myPlaylistCurrentData } = useQuery({
     queryFn: () => getCurrentMusicData(uid),
     queryKey: [GET_MUSIC_LIST_QUERY_KEYS.MY_CURRENT_MUSIC_LIST, uid],
@@ -108,10 +113,12 @@ const UserPlaylist = ({
     },
   })
 
+  //선택한 노래 담는 useState 초기화 함수
   const checkListReset = () => {
     setCheckedList([])
   }
 
+  //체크박스 check 상태 변경 핸들러
   const onChangeCheckMusicHandler = (checked: boolean, id: string) => {
     if (checked) {
       setCheckedList((prev) => [...prev, id])
@@ -121,6 +128,7 @@ const UserPlaylist = ({
     }
   }
 
+  //현플리에 노래 추가
   const onClickAddHandler = async () => {
     if (checkedList.length === 0) {
       await Swal.fire({
@@ -135,12 +143,14 @@ const UserPlaylist = ({
 
     const myCurrentMusicIds = myPlaylistCurrentData?.[0].currentMusicIds!
     let newData = []
-
+    //현플리에 노래가 있을 경우
     if ((myCurrentMusicIds?.length as number) > 0) {
+      //선택한 노래 중 현플리에 없는 노래 찾아서 addData에 담기
       const addData = checkedList.filter(
         (el) => !myCurrentMusicIds.includes(el),
       )
 
+      //이미 다 추가되어 있다면
       if (addData.length === 0) {
         await Swal.fire({
           icon: 'warning',
@@ -173,9 +183,12 @@ const UserPlaylist = ({
     checkListReset()
   }
 
+  //전체 담기
   const onClickAllAddHandler = async () => {
+    //유저의 공개중인 플레이리스트 데이터(내꺼 아님 유저프로필의 주인꺼임)
     const userPlaylistMy = !userPlaylistMyIds ? [] : userPlaylistMyIds
 
+    //마플리는 없고, 유저 플레이리스트만 있으면 바로 그냥 유저 플리이리스트에 있는 곡 마플리에 담기
     if (!myPlaylistCurrentData?.length && userPlaylistMy.length) {
       await insertMutation.mutate({
         userId: uid,
@@ -184,6 +197,7 @@ const UserPlaylist = ({
       return
     }
 
+    //마플리 데이터
     const myPlayListCurrent = !myPlaylistCurrentData?.[0].currentMusicIds
       ? []
       : myPlaylistCurrentData?.[0].currentMusicIds
@@ -243,6 +257,9 @@ const UserPlaylist = ({
     checkListReset()
   }
 
+  //리렌더링 되면 지연해놓은게 감지가 되지 않기 때문에 useCallback으로 감싸고,
+  //쓰로틀링을 걸어서 스크롤 이벤트가 계속 발생하지 않게함.
+  //현재는 1초 간격으로 실행됨.
   const handleScroll = useCallback(
     throttle(() => {
       const height = listRef.current?.children[0]
@@ -250,10 +267,12 @@ const UserPlaylist = ({
         : 0
       if (scrollBoxRef.current) {
         if (
+          //hasPreviousPage : 이전 페이지 유무, isFetchingPreviousPage : 불러오는 중인지 여부,
           hasPreviousPage &&
           !isFetchingPreviousPage &&
-          scrollBoxRef.current.scrollTop < height * 4
+          scrollBoxRef.current.scrollTop < height * 4 //스크롤 사이즈가 아이템 요소 4개의 높이보다 작으면 실행
         ) {
+          //이전 페이지 데이터 불러오는 함수
           fetchPreviousPage()
         }
       }
@@ -261,7 +280,9 @@ const UserPlaylist = ({
     [fetchPreviousPage, hasPreviousPage],
   )
 
+  //다음 페이지 데이터 불러오는 함수
   const nextPage = () => {
+    //isFetchingNextPage : 다음페이지 불러오는 중인지 여부, hasNextPage : 다음 페이지 유무
     if (!isFetchingNextPage && hasNextPage) {
       fetchNextPage()
     }
@@ -269,12 +290,16 @@ const UserPlaylist = ({
 
   useEffect(() => {
     if (scrollBoxRef.current) {
+      //scrollBoxRef.current : 스크롤할 영역의 타켓
+      //타켓의 상단 좌료를 구해서 useState에 담는다
+      //스크롤할 영역의 높이를 해상도에 따라 가변적으로 구하기 위해서 이 좌표를 useState에 담음
       setScrollBoxTopPosition(scrollBoxRef.current?.getBoundingClientRect().top)
     }
   }, [scrollBoxTopPosition])
 
   useEffect(() => {
     if (scrollBoxRef.current) {
+      //쓰로틀링 적용된 이벤트 핸들러 추가
       scrollBoxRef.current.addEventListener('scroll', handleScroll)
     }
   }, [handleScroll])
@@ -324,7 +349,7 @@ const UserPlaylist = ({
             ref={scrollBoxRef}
             className='overflow-y-auto'
             style={{
-              height: `calc(100vh - ${scrollBoxTopPosition}px - 30px)`,
+              height: `calc(100vh - ${scrollBoxTopPosition}px - 30px)`, //100vh에서 타켓의 top좌표를 구한 값으로 빼서 높이를 동적으로 구함.
             }}
           >
             <InfiniteScrollContainer

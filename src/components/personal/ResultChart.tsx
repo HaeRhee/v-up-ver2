@@ -9,24 +9,31 @@ import {
 import type { ResultChartProps } from '@/types/personal/type'
 
 const ResultChart: React.FC<ResultChartProps> = ({ userChar }) => {
+  //똑같이 입력한 mbti를 불러온다.
   const mbtiStatus = userChar.mbti
 
+  //차트를 그리기위한 준비
   const chartRef = useRef<HTMLCanvasElement | null>(null)
   const chartInstance = useRef<Chart | null>(null)
 
+  //mbti별 선호도 & 비선호도
   const preference = usePreferenceQuery(mbtiStatus)
   const dislike = useDisLikeQuery(mbtiStatus)
 
   useEffect(() => {
     if (preference && dislike) {
-      const labels = Object.keys(preference)
-      const preferenceData = Object.values(preference)
-      const dislikeData = Object.values(dislike)
+      //차트에 쓸 라벨과 데이터 값으로 필요한 부분만 추출
+      const labels = Object.keys(preference) // 장르
+      const preferenceData = Object.values(preference) //장르별 선호도 데이터
+      const dislikeData = Object.values(dislike) //장르별 비선호도 데이터
 
       if (chartRef.current) {
         if (chartInstance.current) {
-          chartInstance.current.destroy()
+          //이전에 만든 차트가 있다면
+          chartInstance.current.destroy() //해당 차트를 지운다
         }
+
+        //캔버스를 그림
         const context = chartRef.current.getContext('2d')
 
         if (context) {
@@ -53,8 +60,10 @@ const ResultChart: React.FC<ResultChartProps> = ({ userChar }) => {
                 },
               ],
             },
+            //차트의 글자 색, 글자 크기 등 커스텀하는 부분
             options: {
               scales: {
+                //오각형 차트의 색
                 r: {
                   angleLines: {
                     color: 'white',
@@ -69,6 +78,7 @@ const ResultChart: React.FC<ResultChartProps> = ({ userChar }) => {
                     },
                   },
                   ticks: {
+                    //차트의 수치 색
                     color: 'blue',
                   },
                 },
@@ -97,7 +107,7 @@ const ResultChart: React.FC<ResultChartProps> = ({ userChar }) => {
           chartInstance.current = newChart
         }
       }
-    }
+    } //차트의 값이 변경될 때마다 다시 그려주기 위한 의존성 배열
   }, [preference, dislike, chartRef.current])
 
   return (

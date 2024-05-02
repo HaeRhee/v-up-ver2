@@ -14,6 +14,9 @@ const GenderPage = ({
 }) => {
   const [gender, setGender] = useState<string>('')
   const router = useRouter()
+
+  //성별을 다음 컴포넌트로 넘겨주기 위해 zustand로 관리
+  // zustand에 성별을 저장할 addGender 함수
   const { addGender } = useSurvey()
 
   const handleGenderChange = (selectedGender: string) => {
@@ -21,6 +24,7 @@ const GenderPage = ({
   }
 
   const handleNextClick = (param: string) => {
+    //pageTwo라는 인자를 전달해 다음 컴포넌트로 이동
     if (!gender) {
       // alert('성별을 선택해주세요.')
       Swal.fire({

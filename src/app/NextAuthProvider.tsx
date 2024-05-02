@@ -9,5 +9,8 @@ type Props = {
 }
 
 export const NextAuthProvider = ({ session, children }: Props) => {
+  // 세션 프로바이더
+  // 받은 session을 SessionProvider에 전달
+  // 해당 세션 정보를 하위 컴포넌트에 전달
   return <SessionProvider session={session}>{children}</SessionProvider>
 }

@@ -7,11 +7,11 @@ import MusicSearchModal from './MusicSearchModal'
 const MusicSearch = () => {
   const [isModal, setIsModal] = useState<boolean>(false)
   const { setIsChooseMusic } = useMusicSearchedStore()
-
+  // 음악 등록 모달
   const onModalOpenHandler = (e: MouseEvent) => {
     e.preventDefault()
     setIsModal(true)
-    setIsChooseMusic(false)
+    setIsChooseMusic(false) // 선택한 음악 유무 설정 - css active 활성화 해제
   }
 
   return (

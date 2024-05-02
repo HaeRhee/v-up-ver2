@@ -22,6 +22,7 @@ const TopLikedBoard = () => {
 
   const MOVE_POINT = 354 + 16 //임시값 - 슬라이드로 이동할 값
 
+  //어제부터 일주일간 좋아요를 많이받은 게시물 데이터 조회
   const { data, isError, isLoading } = useQuery({
     queryFn: () => getTopLikedBoardData(),
     queryKey: [GET_COMMUNITY_LIST_QUERY_KEY.GET_TOP_LIKED_BOARD],

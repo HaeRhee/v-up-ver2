@@ -67,10 +67,12 @@ const WriteList = () => {
     },
   })
 
+  //현플리에 노래 추가하는 함수
   const onClickAddCurrentMusicHandler = async (musicId: string) => {
     const currentList = playListCurrent?.length
       ? playListCurrent[0].currentMusicIds
       : []
+    //현플리에 추가하려는 노래가 이미 있을 경우
     if (currentList.find((el) => el === musicId)) {
       await Swal.fire({
         icon: 'warning',

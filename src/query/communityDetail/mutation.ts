@@ -53,7 +53,6 @@ export const useCoummunityItem = () => {
   })
 
   return {
-    // updateCommunityMutation,
     deleteCommunityMutation,
     addCommunityMutation,
     insertMyMutation,
@@ -82,6 +81,7 @@ export const useCoummunityCreateItem = () => {
   return { updateMutation, insertMutation }
 }
 
+// 현재 게시물 정보만 가져오도록 currentBoardId로 쿼리키 핸들링
 export const updateCommnityInvalidate = (currentBoardId: string) => {
   const updateCommunityMutation = useMutation({
     mutationFn: updateCommnityBoard,

@@ -22,6 +22,7 @@ const RecommendationMusicList = ({
   const MOVE_POINT = 136 + 24 //임시값 - 슬라이드로 이동할 값
 
   //mbti 있을 때
+  //상위 컴포넌트로 받은 top3 장르를 기반으로 뮤직 테이블에서 10개 조회
   const { data, isError, isLoading } = useQuery({
     queryFn: () => getGenreMusicData(musicPreferenceData),
     queryKey: [GENRE_MUSIC_QUERY_KEY.GET_MAIN_GENRE_MUSIC, musicPreferenceData],

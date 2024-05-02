@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Swal from 'sweetalert2'
+// dompurify에서 세팅할 createDOMPurify 가져오기
 import createDOMPurify from 'dompurify'
 import {
   updateCommnityInvalidate,
@@ -30,20 +31,22 @@ import { QuillNoSSRWrapper } from './QuillEditor'
 import { CommunityNoSsrQuillEditor } from './CommunityNoSsrQuillEditor'
 import type { readCommuDetail } from '@/types/communityDetail/detailTypes'
 import { MusicInfoType } from '@/types/musicPlayer/types'
-import ContentsHeader from './ContentsHeader'
-import DetailuserImage from './DetailuserImage'
-import DetailEditDelete from './DetailEditDelete'
+import ContentsHeader from './ContentsHeader' //컨텐츠 헤더 컴포넌트
+import DetailuserImage from './DetailuserImage' //유저 이미지 컴포넌트
+import DetailEditDelete from './DetailEditDelete' // 수정, 삭제 기능 컴포넌트
+import DetailMusicInfo from './DetailMusicInfo'
 
 const CommunityContents = () => {
+  // 커뮤니티 상세페이지
   const router = useRouter()
   const DOMPurify =
-    typeof window !== 'undefined' ? createDOMPurify(window) : null
+    typeof window !== 'undefined' ? createDOMPurify(window) : null // DOMPurify 객체가 CSR환경에서 작동하게
 
   const { setIsChooseMusic } = useMusicSearchedStore()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const { data: userSessionInfo, status } = useSession()
   const uid = userSessionInfo?.user?.uid as string
-  const { id: currentBoardId }: { id: string } = useParams()
+  const { id: currentBoardId }: { id: string } = useParams() // 현재 게시글 id 추출
   const { updateMutation, insertMutation } = useCoummunityCreateItem()
   const {
     playListCurrent,
@@ -53,8 +56,9 @@ const CommunityContents = () => {
     isLoading,
     error,
     commentsData,
-  } = useMusicDataInCommuDetailQuery(uid, currentBoardId)
+  } = useMusicDataInCommuDetailQuery(uid, currentBoardId) // 커뮤니티 상세 페이지 쿼리 함수들
 
+  // 커뮤니티 상세페이지 관련 뮤테이션 함수들
   const { updateCommunityMutation } = updateCommnityInvalidate(currentBoardId)
   const { deleteCommunityMutation, insertMyMutation, updateMyMutation } =
     useCoummunityItem()
@@ -374,32 +378,12 @@ const CommunityContents = () => {
                 dragHandler(e, item)
               }}
             >
-              <div className='flex items-center gap-[32px]'>
-                <figure className='flex h-[80px] w-[80px] items-center rounded-full border-[2px] border-solid border-[rgba(255,255,255,0.1)]'>
-                  <Image
-                    src={`${thumbnail}`}
-                    alt='노래 앨범 이미지'
-                    width={80}
-                    height={80}
-                    className='rounded-full '
-                  />
-                </figure>
-                <div className='flex flex-col gap-[8px] '>
-                  <div>
-                    <p className='text-[24px] font-bold'>{musicTitle}</p>
-                  </div>
-                  <div>
-                    <p className='font-bold text-[rgba(255,255,255,0.4)]'>
-                      {artist}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className='flex'>
-                <p className='flex items-center text-[16px] font-bold'>
-                  {runTime}
-                </p>
-              </div>
+              <DetailMusicInfo
+                thumbnail={thumbnail}
+                musicTitle={musicTitle}
+                artist={artist}
+                runTime={runTime}
+              />
             </li>
             <li className='flex items-center justify-center gap-[16px]'>
               <button
@@ -429,16 +413,17 @@ const CommunityContents = () => {
           </ul>
 
           <article className='px-[16px] pb-[72px] text-[16px] font-bold'>
+            {/* 수정 모드일 경우 Quill 에디터, 아닐 경우 읽기 전용 Quill 에디터 */}
             {isEdit ? (
               <CommunityNoSsrQuillEditor
-                theme='snow'
+                theme='snow' // 에디터 편집 모드가 가능한 테마
                 content={updatedContent}
                 setCommunityForm={setEditForm}
               />
             ) : (
               <QuillNoSSRWrapper
-                theme='bubble'
-                readOnly={true}
+                theme='bubble' // 에디터 읽기모드를 위한 테마
+                readOnly={true} // 에디어 읽기모드를 제공하는 속성
                 value={setCotent}
                 className='h-[200px] w-full px-[15px] tracking-[-0.03em]'
               />

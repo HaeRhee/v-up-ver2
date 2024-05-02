@@ -21,19 +21,24 @@ const PersonalSubTest = ({
 }: {
   setPageCount: React.Dispatch<React.SetStateAction<string>>
 }) => {
+  //똑같이 입력한 성별, mbti를 기억하고 db에넣기위해 zustand로 관리
   const { addUserChar, userGender, userChar } = useSurvey()
   const { data: userSessionInfo } = useSession()
   const userId = userSessionInfo?.user?.uid as string
   const insertUserCharMutation = useMutateUserChar()
 
+  //퍼스널 진단을 한적이 있다면, 기존 mbti를 불러오기 위해 zustand에서 꺼내온다.
   const exMbti = userChar.mbti
-
   const [exEI, exSN, exTF, exPJ] = exMbti.split('')
+
+  //mbti는 checkList로 선택하며 t/f의 값에 따라 관리
+  //참 : E/N/T/J , 거짓: I/S/F/P
   const [EI, setEI] = useState<boolean>(exEI === 'E' ? false : true ?? false)
   const [SN, setSN] = useState<boolean>(exSN === 'N' ? false : true ?? false)
   const [TF, setTF] = useState<boolean>(exTF === 'F' ? false : true ?? false)
   const [PJ, setPJ] = useState<boolean>(exPJ === 'J' ? false : true ?? false)
 
+  //선택한 mbti는 각 한 글자씩(I,S,T,P) 이므로 (ISTP)로 합치는 작업
   const calculateMBTI = () => {
     const changeEI = EI ? 'I' : 'E'
     const changeSN = SN ? 'S' : 'N'
@@ -46,6 +51,7 @@ const PersonalSubTest = ({
   const mbti = calculateMBTI()
 
   const onsubmitResultHandler = () => {
+    //입력한 성별+mbti를 zustand에 추가하는 함수
     addUserChar({ gender: userGender, mbti, uid: userId })
     const personalUser: PersonalInfo = {
       mbti: mbti,

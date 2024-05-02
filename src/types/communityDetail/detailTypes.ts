@@ -123,3 +123,17 @@ export type DetailEditDeleteProps = {
   onBoardEditHandler: (e: MouseEvent) => void
   onDeleteBoardHandler: (e: MouseEvent) => void
 }
+
+export type ContentsHeaderProps = {
+  isEdit: boolean
+  onEditCancelHandler: () => void
+  onBackButtonHandler: () => void
+  onBoardEditCompleteHandler: (e: React.MouseEvent) => void
+}
+
+export type DetailMusicInfoType = {
+  thumbnail: string | undefined
+  musicTitle: string | undefined
+  artist: string | undefined
+  runTime: string | undefined
+}

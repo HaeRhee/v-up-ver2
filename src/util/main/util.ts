@@ -1,3 +1,4 @@
+//장르명별 코드 값 뽑기
 export const genreMatch = (genre: string) => {
   let genreCode
   switch (genre) {

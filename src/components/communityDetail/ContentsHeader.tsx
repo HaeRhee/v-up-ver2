@@ -4,13 +4,7 @@ import goback from '@/../public/images/community-detail-Image/back-allow.svg'
 import { ALLOW_SHADOW, BOARD_TITLE_SHADOW } from './communityCss'
 import { DOWN_ACTIVE_BUTTON } from '../login/loginCss'
 import { ACTIVE_BUTTON_SHADOW } from '../login/buttonCss'
-
-export type ContentsHeaderProps = {
-  isEdit: boolean
-  onEditCancelHandler: () => void
-  onBackButtonHandler: () => void
-  onBoardEditCompleteHandler: (e: React.MouseEvent) => void
-}
+import { ContentsHeaderProps } from '@/types/communityDetail/detailTypes'
 
 const ContentsHeader = ({
   isEdit,

@@ -34,13 +34,18 @@ const FollowerList = ({ data }: FollowProps) => {
     },
   })
 
+  //언팔로우 기능
   const onClickUnFollow = (userId: string, targetId: string) => {
+    //나의 팔로잉 데이터에서 타겟과 같은 id를 갖는 유저를 빼고 담는다.
     const newData = data.filter((item) => item !== targetId)
+    //언팔할 타켓의 팔로워 데이터를 가져와서 변수에 담는다
     const targetUserData = followData?.find(
       (item) => item.userId === targetId,
     )?.follower
+    //타켓 유저의 팔로워 데이터에서 '나' 를 뺀 데이터를 변수에 담는다.
     const newTargetData = targetUserData?.filter((item) => item !== userId)!
 
+    //나의 팔로잉 데이터와 타겟의 팔로워 데이터를 업데이트 한다.
     unFollowMutation.mutate({
       userId,
       targetId,
@@ -49,15 +54,20 @@ const FollowerList = ({ data }: FollowProps) => {
     })
   }
 
+  //팔로우 기능
   const onClickFollow = (userId: string, targetId: string) => {
     const prevData = data ? data : []
+    //나의 팔로잉 데이터에 타겟의 id를 추가한 배열을 만든다.
     const newData = [...prevData, targetId]
 
+    //나의 팔로우 데이터에서 타겟과 같은 id를 가진 유저의 팔로워 데이터를 변수에 담는다.
     const newTargetData = followData?.find(
       (item) => item.userId === targetId,
     )?.follower!
+    //타겟의 팔로워 데이터에 나의 아이디를 추가한다.
     newTargetData?.push(userId)
 
+    //나의 팔로잉 데이터와 타겟의 팔로워 데이터를 업데이트 한다.
     unFollowMutation.mutate({
       userId,
       targetId,

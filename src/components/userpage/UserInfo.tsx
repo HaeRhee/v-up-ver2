@@ -38,7 +38,9 @@ const UserInfo = () => {
     },
   })
 
+  //언팔로우 기능
   const onClickUnFollow = () => {
+    //나의 팔로잉 데이터와 타켓의 팔로워 데이터에서 각각 삭제 후 데이터 업데이트
     const newData = myInfo?.following.filter((item) => item !== id)!
     const newTargetData = data?.follower?.filter((item) => item !== uid)!
 
@@ -51,9 +53,12 @@ const UserInfo = () => {
     setIsFollow(false)
   }
 
+  //팔로우 기능
   const onClickFollow = () => {
+    //나의 팔로잉 유저의 데이터 slice로 복사 후 팔로우할 유저 id push로 추가
     const newData = myInfo?.following?.slice()!
     newData.push(id)
+    //타겟의 팔로워 데이터를 slice로 복사 후 타겟의 팔로워 데이터에 나의 아이디 추가
     const newTargetData = data?.follower.slice()!
     newTargetData?.push(uid)
 
@@ -66,18 +71,21 @@ const UserInfo = () => {
     setIsFollow(true)
   }
 
+  //팔로우 상태일 경우 언팔 버튼 렌더링
   useEffect(() => {
     if (data?.follower.find((id) => id === uid)) {
       setIsFollow(true)
     }
   }, [data])
 
+  //미 로그인 시 접근 불가처리
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.replace('/')
     }
   }, [router, status])
 
+  //자기의 유저페이지에는 접근 할 수 없도록 막음
   useEffect(() => {
     if (uid === id) {
       router.replace('/')

@@ -23,14 +23,17 @@ const FindPassword = () => {
 
   const findPassword = async (e: FormEvent) => {
     e.preventDefault()
+
     if (!newPassword) {
       alert('비밀번호를 입력해주세요!')
       return
     }
+
     if (blankPattern.test(newPassword) == true) {
       alert('비밀번호에 공백은 사용할 수 없습니다.')
       return
     }
+
     if (!validateDetailPw.test(newPassword)) {
       await Swal.fire({
         text: '비밀번호는 6자 이상, 숫자, 소문자를 모두 포함해야 합니다.',
@@ -65,6 +68,7 @@ const FindPassword = () => {
       return
     }
   }
+
   return (
     <div className='flex h-screen w-full flex-col items-center justify-center'>
       <div

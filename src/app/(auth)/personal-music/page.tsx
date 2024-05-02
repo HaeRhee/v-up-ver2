@@ -8,8 +8,9 @@ const PersonalMusicPage = () => {
   const [pageCount, setPageCount] = useState<string>('pageOne')
   return (
     <>
+      {/**url이동없이 컴포넌트 이동 */}
       <div className='flex justify-center'>
-        {pageCount === 'pageOne' ? (
+        {pageCount === 'pageOne' ? ( //처음에는 성별 체크 페이지로 이동한다.
           <GenderPage setPageCount={setPageCount} />
         ) : pageCount === 'pageTwo' ? (
           <MBTIPage setPageCount={setPageCount} />

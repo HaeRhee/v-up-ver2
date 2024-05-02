@@ -29,12 +29,16 @@ const Login = () => {
   const { data: userSessionInfo, status } = useSession()
   const uid = userSessionInfo?.user?.uid as string
 
+  // 중복 클릭 방지를 위한 상태를 설정
   const [removeDouble, setRemoveDouble] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [spendEmail, setSpendEmail] = useState<string>('')
+
+  // 이메일 전송 여부를 관리
   const [submitEmail, setSubmitEmail] = useState<boolean>(false)
   const needLoginInfo = { email: '', password: '' }
 
+  // 로그인 입력 정보
   const { form: userlogin, onChange: onChangeHandler } = useInput(needLoginInfo)
   const { email, password } = userlogin
   const sendPasswordText = submitEmail ? '전송완료!' : '전송'
@@ -49,10 +53,14 @@ const Login = () => {
     setIsModalOpen(false)
   }
 
+  // 로그인하는 함수
   const onLoginHandler = async (e: FormEvent) => {
     e.preventDefault()
+
     if (removeDouble) return
+
     setRemoveDouble(true)
+    // 비밀번호에 공백이 있는지 확인
     if (blankPattern.test(password) == true) {
       setRemoveDouble(false)
       await Swal.fire({
@@ -65,6 +73,7 @@ const Login = () => {
       return
     }
 
+    // 이메일 형식이 올바른지 확인
     if (!validateEmail.test(email) && email.length > 0) {
       setRemoveDouble(false)
 
@@ -77,12 +86,14 @@ const Login = () => {
       })
       return
     }
+    // 이메일과 비밀번호를 사용한 로그인
     const signResult = await signIn('email-password-credential', {
       email,
       password,
       redirect: false,
     })
 
+    // 로그인에 성공한 경우 환영 메시지를 띄우고 메인으로
     if (signResult && signResult.ok === true) {
       await Swal.fire({
         title: 'V-UP에 오신 걸 환영합니다!',
@@ -94,6 +105,7 @@ const Login = () => {
       router.push('/')
     }
 
+    // 로그인에 실패한 경우 에러 메시지
     if (signResult && signResult.error) {
       await Swal.fire({
         text: `${signResult.error}`,
@@ -106,8 +118,11 @@ const Login = () => {
     setRemoveDouble(false)
   }
 
+  // 비밀번호 찾기 함수
   const findPassword = async (e: FormEvent) => {
     e.preventDefault()
+
+    // 이메일이 입력되지 않은 경우
     if (!spendEmail) {
       await Swal.fire({
         text: '이메일을 입력해주세요!',
@@ -120,6 +135,7 @@ const Login = () => {
     }
 
     if (spendEmail) {
+      // 비밀번호 재설정 이메일을 전송
       const { error } = await findUserPassword(spendEmail)
       setSpendEmail('')
 
@@ -134,6 +150,7 @@ const Login = () => {
         return setSubmitEmail(true)
       }
 
+      // 에러핸들링
       if (error && error.status === 400) {
         const errorStatus = error.status
         if (errorStatus === 400) {
@@ -172,6 +189,8 @@ const Login = () => {
     }
   }
 
+  // 로그인 상태이면 메인으로 리다이렉션,
+  // 혹여 로그인 유저가 로그인 페이지를 강제로 가려는 경우 대비
   useEffect(() => {
     if (uid) {
       return router.replace('/')
