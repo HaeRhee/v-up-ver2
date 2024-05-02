@@ -34,6 +34,7 @@ import { MusicInfoType } from '@/types/musicPlayer/types'
 import ContentsHeader from './ContentsHeader' //컨텐츠 헤더 컴포넌트
 import DetailuserImage from './DetailuserImage' //유저 이미지 컴포넌트
 import DetailEditDelete from './DetailEditDelete' // 수정, 삭제 기능 컴포넌트
+import DetailMusicInfo from './DetailMusicInfo'
 
 const CommunityContents = () => {
   // 커뮤니티 상세페이지
@@ -377,32 +378,12 @@ const CommunityContents = () => {
                 dragHandler(e, item)
               }}
             >
-              <div className='flex items-center gap-[32px]'>
-                <figure className='flex h-[80px] w-[80px] items-center rounded-full border-[2px] border-solid border-[rgba(255,255,255,0.1)]'>
-                  <Image
-                    src={`${thumbnail}`}
-                    alt='노래 앨범 이미지'
-                    width={80}
-                    height={80}
-                    className='rounded-full '
-                  />
-                </figure>
-                <div className='flex flex-col gap-[8px] '>
-                  <div>
-                    <p className='text-[24px] font-bold'>{musicTitle}</p>
-                  </div>
-                  <div>
-                    <p className='font-bold text-[rgba(255,255,255,0.4)]'>
-                      {artist}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className='flex'>
-                <p className='flex items-center text-[16px] font-bold'>
-                  {runTime}
-                </p>
-              </div>
+              <DetailMusicInfo
+                thumbnail={thumbnail}
+                musicTitle={musicTitle}
+                artist={artist}
+                runTime={runTime}
+              />
             </li>
             <li className='flex items-center justify-center gap-[16px]'>
               <button

@@ -130,3 +130,10 @@ export type ContentsHeaderProps = {
   onBackButtonHandler: () => void
   onBoardEditCompleteHandler: (e: React.MouseEvent) => void
 }
+
+export type DetailMusicInfoType = {
+  thumbnail: string | undefined
+  musicTitle: string | undefined
+  artist: string | undefined
+  runTime: string | undefined
+}
