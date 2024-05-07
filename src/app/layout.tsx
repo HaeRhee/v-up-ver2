@@ -6,13 +6,14 @@ import { FontClassNames } from '@/util/font'
 import Container from '@/components/common/Container'
 
 export const metadata: Metadata = {
-  title: 'Volume Up',
+  title: 'V-UP',
   description:
     '퍼스널 뮤직 검사를 통해 나의 취향에 맞는 음악을 추천받고 음악을 들으며 음악 커뮤니티를 즐길 수 있는 서비스 입니다.',
   openGraph: {
     title: 'V-UP',
     description:
-      '퍼스널 뮤직 검사를 통해 나의 취향에 맞는 음악을 추천받고 음악을 들으며 음악 커뮤니티를 즐길 수 있는 서비스 입니다',
+      '퍼스널 뮤직 검사를 통해 나의 취향에 맞는 음악을 추천받고 음악을 들으며 음악 커뮤니티를 즐길 수 있는 서비스 입니다.',
+    // url: 'https://nextjs.org', //배포되면 주소 추가
     siteName: 'V-UP',
     images: [
       {
