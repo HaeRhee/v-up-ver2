@@ -61,7 +61,13 @@
 
 **프로젝트 명** : V-UP (Volume Up, 불륨업)
 
+**배포 링크** : https://re-v-up-ver-3.vercel.app/
+
 **팀 노션** : [V-UP (Volume Up, 불륨업)](https://www.notion.so/VakVakVerse-16f2aa0964ad45f4b09dee8683b39c23)
+
+**발표 자료** : https://www.canva.com/design/DAGDnKcIjGI/oBJswMRAhDifvn7f2FFMRQ/view?utm_content=DAGDnKcIjGI&utm_campaign=designshare&utm_medium=link&utm_source=editor
+
+**시연 영상** : https://www.youtube.com/watch?v=zsFyAOfzZy0
 
 **개발 기간** : 2024.03. 25~ 2023.05.01 (약 5주간)
 
@@ -79,7 +85,7 @@
   
 - **Language :**  Javascript
   
-- **Framwork** : Next(14.1.4)
+- **Framwork** : Next.js(14.1.4)
 
 - **Library**
   - next-auth(^4.24.7)

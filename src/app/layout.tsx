@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: 'V-UP',
     images: [
       {
-        url: '/images/shareLogo.png',
+        url: 'https://github.com/RE-V-UP/v-up-ver2/blob/dev/public/images/shareLogo.png?raw=true',
         width: 1200,
         height: 630,
       },
