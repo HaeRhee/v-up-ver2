@@ -16,6 +16,7 @@
     "@tanstack/react-query": "^5.28.9",
     "@types/chart.js": "^2.9.41",
     "@types/dompurify": "^3.0.5",
+    "@types/jsdom": "^21.1.6",
     "@xeger/quill-image-actions": "^0.7.2",
     "@xeger/quill-image-formats": "^0.7.2",
     "chart.js": "^4.4.2",
