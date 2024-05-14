@@ -7,7 +7,6 @@ import Image from 'next/image'
 import Swal from 'sweetalert2'
 
 import createDOMPurify from 'dompurify'
-import { JSDOM } from 'jsdom'
 import {
   updateCommnityInvalidate,
   useCoummunityCreateItem,
@@ -39,7 +38,6 @@ import DetailMusicInfo from './DetailMusicInfo'
 
 const CommunityContents = () => {
   const router = useRouter()
-  const window = new JSDOM('').window
   const DOMPurify =
     typeof window !== 'undefined' ? createDOMPurify(window) : null
 
@@ -103,7 +101,7 @@ const CommunityContents = () => {
     onChange: onChangeEditForm,
   } = useInput({ boardTitle, content })
   const { boardTitle: updatedTitle, content: updatedContent } = editForm
-  const setCotent = DOMPurify?.sanitize(content)
+  const setCotent = DOMPurify !== null ? DOMPurify.sanitize(content) : ''
 
   const commentLength =
     commentsData && commentsData.length > 99
