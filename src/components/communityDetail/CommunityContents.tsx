@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Swal from 'sweetalert2'
-// dompurify에서 세팅할 createDOMPurify 가져오기
+
 import createDOMPurify from 'dompurify'
 import {
   updateCommnityInvalidate,
@@ -31,22 +31,21 @@ import { QuillNoSSRWrapper } from './QuillEditor'
 import { CommunityNoSsrQuillEditor } from './CommunityNoSsrQuillEditor'
 import type { readCommuDetail } from '@/types/communityDetail/detailTypes'
 import { MusicInfoType } from '@/types/musicPlayer/types'
-import ContentsHeader from './ContentsHeader' //컨텐츠 헤더 컴포넌트
-import DetailuserImage from './DetailuserImage' //유저 이미지 컴포넌트
-import DetailEditDelete from './DetailEditDelete' // 수정, 삭제 기능 컴포넌트
+import ContentsHeader from './ContentsHeader'
+import DetailuserImage from './DetailuserImage'
+import DetailEditDelete from './DetailEditDelete'
 import DetailMusicInfo from './DetailMusicInfo'
 
 const CommunityContents = () => {
-  // 커뮤니티 상세페이지
   const router = useRouter()
   const DOMPurify =
-    typeof window !== 'undefined' ? createDOMPurify(window) : null // DOMPurify 객체가 CSR환경에서 작동하게
+    typeof window !== 'undefined' ? createDOMPurify(window) : null
 
   const { setIsChooseMusic } = useMusicSearchedStore()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const { data: userSessionInfo, status } = useSession()
   const uid = userSessionInfo?.user?.uid as string
-  const { id: currentBoardId }: { id: string } = useParams() // 현재 게시글 id 추출
+  const { id: currentBoardId }: { id: string } = useParams()
   const { updateMutation, insertMutation } = useCoummunityCreateItem()
   const {
     playListCurrent,
@@ -56,9 +55,8 @@ const CommunityContents = () => {
     isLoading,
     error,
     commentsData,
-  } = useMusicDataInCommuDetailQuery(uid, currentBoardId) // 커뮤니티 상세 페이지 쿼리 함수들
+  } = useMusicDataInCommuDetailQuery(uid, currentBoardId)
 
-  // 커뮤니티 상세페이지 관련 뮤테이션 함수들
   const { updateCommunityMutation } = updateCommnityInvalidate(currentBoardId)
   const { deleteCommunityMutation, insertMyMutation, updateMyMutation } =
     useCoummunityItem()
@@ -103,7 +101,7 @@ const CommunityContents = () => {
     onChange: onChangeEditForm,
   } = useInput({ boardTitle, content })
   const { boardTitle: updatedTitle, content: updatedContent } = editForm
-  const setCotent = DOMPurify?.sanitize(content)
+  const setCotent = DOMPurify !== null ? DOMPurify.sanitize(content) : ''
 
   const commentLength =
     commentsData && commentsData.length > 99
@@ -186,6 +184,7 @@ const CommunityContents = () => {
         })
         return
       }
+
       router.back()
     })
   }
@@ -241,6 +240,7 @@ const CommunityContents = () => {
     } else {
       insertMutation.mutate({ userId: uid, musicId })
     }
+
     await Swal.fire({
       icon: 'success',
       title: '현재 재생목록에 추가 되었습니다.',
@@ -413,17 +413,16 @@ const CommunityContents = () => {
           </ul>
 
           <article className='px-[16px] pb-[72px] text-[16px] font-bold'>
-            {/* 수정 모드일 경우 Quill 에디터, 아닐 경우 읽기 전용 Quill 에디터 */}
             {isEdit ? (
               <CommunityNoSsrQuillEditor
-                theme='snow' // 에디터 편집 모드가 가능한 테마
+                theme='snow'
                 content={updatedContent}
                 setCommunityForm={setEditForm}
               />
             ) : (
               <QuillNoSSRWrapper
-                theme='bubble' // 에디터 읽기모드를 위한 테마
-                readOnly={true} // 에디어 읽기모드를 제공하는 속성
+                theme='bubble'
+                readOnly={true}
                 value={setCotent}
                 className='h-[200px] w-full px-[15px] tracking-[-0.03em]'
               />
