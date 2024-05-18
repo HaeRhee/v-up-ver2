@@ -18,10 +18,10 @@ const CommunityAddMusic = ({
       }}
     >
       <article className='flex flex-col gap-[16px]'>
-        <section className='flex gap-[16px]'>
+        <section className='flex gap-[16px] md:flex-col'>
           <MusicSearch />
           <article
-            className={`flex h-[88px] w-[602px] gap-[16px] rounded-[16px] bg-[rgba(255,255,255,0.1)] p-[16px] ${ADDED_CURRENT_MUSIC_SHADOW} flex gap-[16px]`}
+            className={`flex h-[88px] w-[602px] gap-[16px] rounded-[16px] bg-[rgba(255,255,255,0.1)] p-[16px] md:w-[335px] ${ADDED_CURRENT_MUSIC_SHADOW} flex gap-[16px]`}
           >
             <section className='flex gap-[16px]'>
               <div className='flex items-center'>
