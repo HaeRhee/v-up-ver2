@@ -167,7 +167,7 @@ const CommunityCreate = () => {
       <div>
         <form onSubmit={onSumitHandler} className='flex flex-col gap-[32px]'>
           <div
-            className={`relative  mt-[32px] flex h-[72px] w-[100%] items-center justify-between rounded-[16px] border-[4px] border-solid border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.1)] px-[24px] py-[12px] tracking-[-0.03em] ${ADD_BOARD_STICK}`}
+            className={`relative  mt-[32px] flex h-[72px] w-[100%] items-center justify-between rounded-[16px] border-[4px] border-solid border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.1)] px-[24px] py-[12px] tracking-[-0.03em] md:w-[335px] ${ADD_BOARD_STICK}`}
           >
             <div className='absolute left-[45%] top-[32.5%] mx-[auto]  text-center'>
               <h3>글쓰기</h3>
@@ -205,12 +205,12 @@ const CommunityCreate = () => {
                 ref={refTitle}
                 maxLength={40}
                 onChange={onChangeHandler}
-                className=' mb-4 w-full rounded-lg border-none bg-[rgba(255,255,255,0.1)] p-2 placeholder:text-[#ffffff5a]'
+                className=' mb-4 w-full rounded-lg border-none bg-[rgba(255,255,255,0.1)] p-2 placeholder:text-[#ffffff5a] md:w-[335px]'
                 placeholder='제목을 입력해 주세요.(40자 이내)'
               />
             </div>
 
-            <article className='h-[200px] text-[16px]'>
+            <article className='h-[200px] text-[16px] md:w-[335px]'>
               <CommunityNoSsrQuillEditor
                 theme='snow'
                 content={content}
