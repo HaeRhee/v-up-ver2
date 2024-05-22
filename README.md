@@ -241,7 +241,7 @@
 $ git clone https://github.com/RE-V-UP/v-up-ver2.git
 $ cd v-up-ver2
 $ yarn install or npm install
-$ yarn run start or npm run start
+$ yarn dev or npm dev
 ```
 
 ### Environment variable
